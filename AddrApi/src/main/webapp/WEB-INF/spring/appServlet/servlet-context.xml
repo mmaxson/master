@@ -4,20 +4,23 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven >
-	<!-- <mvc:message-converters>
-        <beans:bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"
-           />
-    </mvc:message-converters> -->
-    </mvc:annotation-driven>
+	<mvc:annotation-driven />
+	 
+  
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
@@ -77,6 +80,39 @@
 	
 	<context:component-scan base-package="com.murun.addr.*" />
 	 
+ <!-- 
+	<context:property-placeholder location="classpath*:properties/*.properties"/>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<beans:bean id="jdbcDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+      <beans:property name="url" value="${jdbc.url}"/>
+      <beans:property name="driverClassName" value="${jdbc.driverClassName}"  />                         
+      <beans:property name="username" value="${jdbc.username}"/>
+      <beans:property name="password" value="${jdbc.password}"/>
+      <beans:property name="maxActive" value="2"/>
+      <beans:property name="maxIdle" value="2"/>
+    </beans:bean>
 	
+	
+	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">    
+        <beans:property name="sessionFactory" ref="sessionFactory" />
+    </beans:bean>
+    
+	<beans:bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" >
+    	<beans:property name="dataSource" ref="jdbcDataSource" />
+    	<beans:property name="packagesToScan" value="com.murun.addr.model" />
+    	 
+        <beans:property name="hibernateProperties">
+            <beans:props>
+            	<beans:prop key="hibernate.show_sql">false</beans:prop>
+            	<beans:prop key="debug">true</beans:prop>
+            	<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</beans:prop>
+                <beans:prop key="hibernate.jdbc.fetch_size">512</beans:prop>
+           		<beans:prop key="hibernate.jdbc.batch_size">30</beans:prop>
+            	<beans:prop key="hibernate.hbm2ddl.auto">none</beans:prop> 
+            </beans:props>
+       </beans:property>
+     </beans:bean> -->
+     
 	
 </beans:beans>

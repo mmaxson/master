@@ -23,4 +23,8 @@ public class AddressList {
 	public List<Address> getAll(){
 		return addressList;
 	}
+	
+	public void setAll( List<Address> addressList ){
+		this. addressList = addressList ;
+	}
 }
