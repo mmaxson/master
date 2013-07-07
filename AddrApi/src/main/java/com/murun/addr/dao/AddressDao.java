@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.murun.addr.model.Address;
 import com.murun.addr.model.AddressList;
@@ -14,7 +15,7 @@ import com.murun.addr.model.AddressList;
 public class AddressDao {
 
 	private SessionFactory sessionFactory; 
-	private static final String queryString = "FROM MURUN.ADDRESS where ZIP = :zipCode";
+	private static final String queryString = "from Address where zipCode = :zipCode";
       
 	
 	 @Resource

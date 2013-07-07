@@ -21,6 +21,6 @@ public class AddressService {
 	}
 	
 	public Address getOne( String zipCode ){
-		return  addressDao.getOne( zipCode );
+		return addressDao.getOne( zipCode );
 	}
 }

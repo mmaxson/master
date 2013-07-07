@@ -22,11 +22,10 @@ public class SearchController {
 	
 	@Resource
 	AddressService addressService;
-	 
 	
-	@RequestMapping(method=RequestMethod.GET, value="/zipcode/{zipcode}", produces="application/xml")
-	public @ResponseBody AddressList findByZipCode(@PathVariable("zipcode") String zipCode ) {
-		logger.info("...................findByZipCode....2......");
+	@RequestMapping( method=RequestMethod.GET, value="/zipcode/{zipcode}", produces="application/json")
+	public @ResponseBody AddressList findByZipCode( @PathVariable("zipcode") String zipCode ) {
+		logger.info("Zipcode= "+zipCode);
 		return addressService.getByZipCode( zipCode );
 	}
 	
