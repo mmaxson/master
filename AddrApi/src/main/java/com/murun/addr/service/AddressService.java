@@ -19,7 +19,11 @@ public class AddressService {
 	public AddressList getByZipCode( String zipCode ){
 		return addressDao.getByZipCode( zipCode );
 	}
-	
+
+	public AddressList getByName( String zipCode ){
+		return addressDao.getByName( zipCode );
+	}
+
 	public Address getOne( String zipCode ){
 		return addressDao.getOne( zipCode );
 	}
