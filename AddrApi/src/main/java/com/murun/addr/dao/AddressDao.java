@@ -14,12 +14,14 @@ import com.murun.addr.model.AddressList;
 
 public class AddressDao {
 
-	private SessionFactory sessionFactory; 
+	private SessionFactory sessionFactory;
+
 	private static final String queryString = "from Address where zipCode = :zipCode";
+	private static final String queryStringByName = "from Address where name = :name";
       
 	
 	 @Resource
-	   public void setSessionFactory(SessionFactory sessionFactory) {
+	 public void setSessionFactory(SessionFactory sessionFactory) {
 	       this.sessionFactory = sessionFactory;
 	   }
 	 
@@ -52,5 +54,25 @@ public class AddressDao {
 			 
 		 
 		return temp;
+	}
+
+
+	public AddressList getByName( String name ){
+		AddressList retVal = new AddressList();
+//		for ( int i=0; i<10; i++){
+//
+//		System.out.println( zipCode + " " + i);
+//		    Address temp = new Address();
+//		    temp.setState(String.valueOf(i) + " state");
+//		    temp.setStreet( String.valueOf(i) + " street" );
+//		    temp.setZipCode( String.valueOf(i) );
+//			retVal.add( temp );
+//		}
+
+		Query q = sessionFactory.getCurrentSession().createQuery( queryStringByName );
+		q.setParameter("name", name);
+		retVal.setAll( q.list() );
+
+		return retVal;
 	}
 }
