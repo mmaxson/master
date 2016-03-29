@@ -1,6 +1,7 @@
 package com.murun.addr.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -8,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  
 
 @Entity
+
 @XmlRootElement(name = "address")
 public class Address {
 

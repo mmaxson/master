@@ -26,7 +26,7 @@ public class SearchController {
 	
 	@RequestMapping( method=RequestMethod.GET, value="/zipcode/{zipcode}", produces="application/json")
 	public AddressList findByZipCode( @PathVariable("zipcode") String zipCode ) {
-		logger.info("Zipcode= "+zipCode);
+		logger.info("Zipcode================================ "+zipCode);
 		return addressService.getByZipCode(zipCode);
 	}
 

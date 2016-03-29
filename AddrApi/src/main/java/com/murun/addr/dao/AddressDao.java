@@ -16,7 +16,7 @@ public class AddressDao {
 
 	private SessionFactory sessionFactory;
 
-	private static final String queryString = "from Address where zipCode = :zipCode";
+	private static final String queryString = "from Address where zipCode = :zipCode ";
 	private static final String queryStringByName = "from Address where name = :name";
       
 	
