@@ -16,12 +16,32 @@ public class AddressService {
 	@Resource
 	AddressDao addressDao;
 
-	public AddressList getByZipCode( String zipCode ){
-		return addressDao.getByZipCode( zipCode );
+	public AddressList getAll(){
+		return addressDao.getAll();
 	}
 
-	public AddressList getByName( String zipCode ){
-		return addressDao.getByName( zipCode );
+	public AddressList getByState( String state ){
+		return addressDao.getByState( state );
+	}
+
+    public AddressList getByStateAndCity( String state, String city ){
+        return addressDao.getByStateAndCity( state, city );
+    }
+
+    public AddressList getByZipCode( String zipCode ){
+        return addressDao.getByZipCode( zipCode );
+    }
+
+	public Address getById( int id ){
+		if ( addressDao.getById( id ).getAll().size() == 0 ){
+            return null;
+        }
+
+        return addressDao.getById( id ).getAll().get(0);
+	}
+
+	public int updateAddress( Address address ){
+		return addressDao.updateAddress( address );
 	}
 
 	public Address getOne( String zipCode ){

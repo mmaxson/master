@@ -17,6 +17,7 @@ public class Address {
 	private int id;
 	
 	private String street;
+	private String city;
 	private String state;
 	private String zipCode;
 	
@@ -47,6 +48,11 @@ public class Address {
 	}
 
 	@XmlElement
+	public void setCity( String city) {
+		this.city = city;
+	}
+
+	@XmlElement
 	public void setState( String state) {
 		this.state = state;
 	}
@@ -58,6 +64,10 @@ public class Address {
 
 	public String getStreet() {
 		return street;
+	}
+
+	public String getCity() {
+		return city;
 	}
 
 	public String getState() {

@@ -16,28 +16,53 @@ public class AddressDao {
 
 	private SessionFactory sessionFactory;
 
-	private static final String queryString = "from Address where zipCode = :zipCode ";
-	private static final String queryStringByName = "from Address where name = :name";
-      
+    private static final String queryStringGetAll = "from Address";
+    private static final String queryStringByState= "from Address where state = :state ";
+    private static final String queryStringByStateAndCity= "from Address where state = :state and city = :city ";
+	private static final String queryStringByZipCode = "from Address where zipCode = :zipCode ";
+	private static final String queryStringById = "from Address where id = :id";
+	private static final String queryStringUpdateAddress = "update Address set street=:street, city=:city, state=:state, zipCode=:zipCode where id = :id";
+
 	
 	 @Resource
 	 public void setSessionFactory(SessionFactory sessionFactory) {
 	       this.sessionFactory = sessionFactory;
 	   }
-	 
+
+    public AddressList getAll(){
+        AddressList retVal = new AddressList();
+
+        Query q = sessionFactory.getCurrentSession().createQuery(queryStringGetAll);
+        retVal.setAll( q.list() );
+
+        return retVal;
+    }
+
+    public AddressList getByState(String state){
+        AddressList retVal = new AddressList();
+
+        Query q = sessionFactory.getCurrentSession().createQuery( queryStringByState );
+        q.setParameter("state", state);
+        retVal.setAll( q.list() );
+
+        return retVal;
+    }
+
+    public AddressList getByStateAndCity(String state, String city){
+        AddressList retVal = new AddressList();
+
+        Query q = sessionFactory.getCurrentSession().createQuery( queryStringByStateAndCity );
+        q.setParameter("state", state);
+        q.setParameter("city", city);
+        retVal.setAll( q.list() );
+
+        return retVal;
+    }
+
 	public AddressList getByZipCode( String zipCode ){
 		AddressList retVal = new AddressList(); 
-//		for ( int i=0; i<10; i++){
-//			 
-//		System.out.println( zipCode + " " + i);
-//		    Address temp = new Address();
-//		    temp.setState(String.valueOf(i) + " state");
-//		    temp.setStreet( String.valueOf(i) + " street" );
-//		    temp.setZipCode( String.valueOf(i) );
-//			retVal.add( temp );
-//		}
-		
-	    Query q = sessionFactory.getCurrentSession().createQuery( queryString );
+
+	    Query q = sessionFactory.getCurrentSession().createQuery( queryStringByZipCode );
 	    q.setParameter("zipCode", zipCode);
 	    retVal.setAll( q.list() );
 	     
@@ -48,8 +73,8 @@ public class AddressDao {
 		 
 		System.out.println( zipCode + " getone");
 		    Address temp = new Address();
+            temp.setStreet( String.valueOf(1) + " street" );
 		    temp.setState(String.valueOf(1) + " state");
-		    temp.setStreet( String.valueOf(1) + " street" );
 		    temp.setZipCode( String.valueOf(1) );
 			 
 		 
@@ -57,21 +82,27 @@ public class AddressDao {
 	}
 
 
-	public AddressList getByName( String name ){
+	public AddressList getById( int id ){
 		AddressList retVal = new AddressList();
-//		for ( int i=0; i<10; i++){
-//
-//		System.out.println( zipCode + " " + i);
-//		    Address temp = new Address();
-//		    temp.setState(String.valueOf(i) + " state");
-//		    temp.setStreet( String.valueOf(i) + " street" );
-//		    temp.setZipCode( String.valueOf(i) );
-//			retVal.add( temp );
-//		}
 
-		Query q = sessionFactory.getCurrentSession().createQuery( queryStringByName );
-		q.setParameter("name", name);
+		Query q = sessionFactory.getCurrentSession().createQuery( queryStringById );
+		q.setParameter("id", id);
 		retVal.setAll( q.list() );
+
+		return retVal;
+	}
+
+	public int updateAddress( Address address ){
+
+		Query q = sessionFactory.getCurrentSession().createQuery( queryStringUpdateAddress );
+
+		q.setParameter("id", address.getId());
+        q.setParameter("street", address.getStreet());
+		q.setParameter("city", address.getCity());
+        q.setParameter("state", address.getState());
+        q.setParameter("zipCode", address.getZipCode());
+		int retVal = q.executeUpdate();
+
 
 		return retVal;
 	}
