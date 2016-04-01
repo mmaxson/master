@@ -13,7 +13,7 @@ public class SuccessResource {
 
     private String code;
     private String message;
-    private LocalDateTime dateTime = LocalDateTime.now();
+    private final LocalDateTime dateTime = LocalDateTime.now();
 
 
     public SuccessResource(String code, String message) {

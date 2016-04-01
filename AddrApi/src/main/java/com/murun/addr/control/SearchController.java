@@ -8,6 +8,9 @@ import com.murun.addr.model.SuccessResource;
 import com.murun.addr.service.AddressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -47,14 +50,13 @@ public class SearchController {
         else{
             return addressService.getByStateAndCity(state, city);
         }
-
     }
 
 	@RequestMapping(method=RequestMethod.GET, value="/id/{id}", produces="application/json")
     public Address findById(@PathVariable("id") String idStr) {
 		logger.info("Id================ "+idStr);
 
-        int id = 0;
+        int id;
         try {
             id = Integer.parseInt(idStr);
         } catch (NumberFormatException e) {
@@ -71,13 +73,12 @@ public class SearchController {
 
 
     @RequestMapping(method = RequestMethod.PUT, value= "/id/{id}", produces="application/json")
-    public SuccessResource updateAddress(@PathVariable("id") int id, @RequestBody Address address) {
+    public ResponseEntity<SuccessResource> updateAddress(@PathVariable("id") int id, @RequestBody Address address) {
         logger.info("Id================ "+id);
 
         Address currentAddress = addressService.getById(id);
 
         if (currentAddress==null) {
-            System.out.println("User with id " + id + " not found");
             throw new AddressNotFoundException(id);
         }
 
@@ -88,12 +89,45 @@ public class SearchController {
         currentAddress.setZipCode(address.getZipCode());
 
         int retVal= addressService.updateAddress(currentAddress);
-        logger.info("retval================ "+retVal);
 
         if (retVal != 1){
             throw new IllegalStateException("Cannot update row with id = " + id);
         }
-        return new SuccessResource("Success", "Row with id " + id + " updated.");
+
+        SuccessResource sr =new SuccessResource("Success", "Row with id " + id + " updated.");
+
+        return new ResponseEntity<SuccessResource>(sr, new HttpHeaders(), HttpStatus.CREATED);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value= "", produces="application/json")
+    public ResponseEntity<SuccessResource> createAddress(@RequestBody Address address) {
+
+        int retVal= addressService.createAddress(address);
+
+        if (retVal <= 0){
+            throw new IllegalStateException("Cannot create row.");
+        }
+
+        SuccessResource sr =new SuccessResource("Success", "Row with id " + retVal + " was created.");
+
+        return new ResponseEntity<SuccessResource>(sr, new HttpHeaders(), HttpStatus.CREATED);
+    }
+
+//    @RequestMapping(method = RequestMethod.POST)
+//    ResponseEntity<?> add(@PathVariable String userId, @RequestBody Bookmark input) {
+//        this.validateUser(userId);
+//        return this.accountRepository
+//                .findByUsername(userId)
+//                .map(account -> {
+//                    Bookmark result = bookmarkRepository.save(new Bookmark(account,
+//                            input.uri, input.description));
+//
+//                    HttpHeaders httpHeaders = new HttpHeaders();
+//                    httpHeaders.setLocation(ServletUriComponentsBuilder
+//                            .fromCurrentRequest().path("/{id}")
+//                            .buildAndExpand(result.getId()).toUri());
+//                    return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+//                }).get();
+//
+//    }
 }

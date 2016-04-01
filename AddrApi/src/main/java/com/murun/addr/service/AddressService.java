@@ -28,7 +28,7 @@ public class AddressService {
         return addressDao.getByStateAndCity( state, city );
     }
 
-    public AddressList getByZipCode( String zipCode ){
+    public AddressList getByZipCode(String zipCode){
         return addressDao.getByZipCode( zipCode );
     }
 
@@ -43,6 +43,10 @@ public class AddressService {
 	public int updateAddress( Address address ){
 		return addressDao.updateAddress( address );
 	}
+
+    public int createAddress( Address address ){
+        return addressDao.createAddress( address );
+    }
 
 	public Address getOne( String zipCode ){
 		return addressDao.getOne( zipCode );

@@ -5,7 +5,6 @@ import javax.annotation.Resource;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.murun.addr.model.Address;
 import com.murun.addr.model.AddressList;
@@ -21,8 +20,6 @@ public class AddressDao {
     private static final String queryStringByStateAndCity= "from Address where state = :state and city = :city ";
 	private static final String queryStringByZipCode = "from Address where zipCode = :zipCode ";
 	private static final String queryStringById = "from Address where id = :id";
-	private static final String queryStringUpdateAddress = "update Address set street=:street, city=:city, state=:state, zipCode=:zipCode where id = :id";
-
 	
 	 @Resource
 	 public void setSessionFactory(SessionFactory sessionFactory) {
@@ -92,18 +89,14 @@ public class AddressDao {
 		return retVal;
 	}
 
-	public int updateAddress( Address address ){
-
-		Query q = sessionFactory.getCurrentSession().createQuery( queryStringUpdateAddress );
-
-		q.setParameter("id", address.getId());
-        q.setParameter("street", address.getStreet());
-		q.setParameter("city", address.getCity());
-        q.setParameter("state", address.getState());
-        q.setParameter("zipCode", address.getZipCode());
-		int retVal = q.executeUpdate();
-
-
-		return retVal;
+	public int updateAddress(Address address){
+		sessionFactory.getCurrentSession().update(address);
+        return 1;
 	}
+
+
+    public int createAddress(Address address){
+        Integer retVal = (Integer) sessionFactory.getCurrentSession().save(address);
+        return retVal;
+    }
 }
