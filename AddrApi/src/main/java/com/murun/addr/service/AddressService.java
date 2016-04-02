@@ -2,6 +2,8 @@ package com.murun.addr.service;
 
 import javax.annotation.Resource;
 
+import com.murun.addr.dao.DocumentDao;
+import com.murun.addr.model.Document;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ public class AddressService {
 
 	@Resource
 	AddressDao addressDao;
+
 
 	public AddressList getAll(){
 		return addressDao.getAll();
@@ -32,12 +35,8 @@ public class AddressService {
         return addressDao.getByZipCode( zipCode );
     }
 
-	public Address getById( int id ){
-		if ( addressDao.getById( id ).getAll().size() == 0 ){
-            return null;
-        }
-
-        return addressDao.getById( id ).getAll().get(0);
+	public Address getById(int id){
+        return addressDao.getById(id);
 	}
 
 	public int updateAddress( Address address ){

@@ -1,7 +1,8 @@
 package com.murun.addr.control;
 
 
-import com.murun.addr.exceptions.AddressNotFoundException;
+import com.murun.addr.exceptions.NotFoundException;
+import com.murun.addr.exceptions.InternalErrorException;
 import com.murun.addr.model.ErrorResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,15 +32,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, error, headers, HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler({ AddressNotFoundException.class })
+    @ExceptionHandler({ NotFoundException.class })
     public ResponseEntity<Object> handleNotFoundException(RuntimeException e, WebRequest request){
         ErrorResource error = new ErrorResource("NotFound", e.getMessage());
         return handleExceptionInternal(e, error, headers, HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler({ IllegalStateException.class })
+    @ExceptionHandler({ IllegalStateException.class, InternalErrorException.class })
     public ResponseEntity<Object> internalErrorException(RuntimeException e, WebRequest request){
-        ErrorResource error = new ErrorResource("InternalError", e.getMessage());
+        ErrorResource error = new ErrorResource("InternalErrorException", e.getMessage());
         return handleExceptionInternal(e, error, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 

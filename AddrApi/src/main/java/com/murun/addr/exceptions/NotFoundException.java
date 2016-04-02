@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Address Not Found")
-public class AddressNotFoundException extends RuntimeException {
+public class NotFoundException extends RuntimeException {
 
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    public AddressNotFoundException(int id) {
-        super("Address with id " + id + " does not exist.");
+    public NotFoundException(String message) {
+        super("Resource not found: " +  message );
     }
 }
 

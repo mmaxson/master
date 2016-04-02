@@ -1,21 +1,29 @@
 package com.murun.addr.control;
 
 
-import com.murun.addr.exceptions.AddressNotFoundException;
+import com.murun.addr.exceptions.NotFoundException;
+import com.murun.addr.exceptions.InternalErrorException;
 import com.murun.addr.model.Address;
 import com.murun.addr.model.AddressList;
+import com.murun.addr.model.Document;
 import com.murun.addr.model.SuccessResource;
 import com.murun.addr.service.AddressService;
+import com.murun.addr.service.DocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
-
+import static org.springframework.http.HttpStatus.CREATED;
 
 
 @RestController()
@@ -25,7 +33,11 @@ public class SearchController {
 	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 	
 	@Resource
-	AddressService addressService;
+    private AddressService addressService;
+
+
+    @Resource
+    private DocumentService documentService;
 
 
     @RequestMapping(method=RequestMethod.GET, value="", produces="application/json")
@@ -65,7 +77,7 @@ public class SearchController {
 
         Address retVal = addressService.getById(id);
         if (retVal == null){
-            throw new AddressNotFoundException(id);
+            throw new NotFoundException("Address with id " + id + " does not exist.");
         }
 
         return retVal;
@@ -79,7 +91,7 @@ public class SearchController {
         Address currentAddress = addressService.getById(id);
 
         if (currentAddress==null) {
-            throw new AddressNotFoundException(id);
+            throw new NotFoundException("Address with id " + id + " does not exist.");
         }
 
 
@@ -95,8 +107,7 @@ public class SearchController {
         }
 
         SuccessResource sr =new SuccessResource("Success", "Row with id " + id + " updated.");
-
-        return new ResponseEntity<SuccessResource>(sr, new HttpHeaders(), HttpStatus.CREATED);
+        return new ResponseEntity<SuccessResource>(sr, new HttpHeaders(), CREATED);
     }
 
     @RequestMapping(method = RequestMethod.POST, value= "", produces="application/json")
@@ -110,7 +121,55 @@ public class SearchController {
 
         SuccessResource sr =new SuccessResource("Success", "Row with id " + retVal + " was created.");
 
+        return new ResponseEntity<SuccessResource>(sr, new HttpHeaders(), CREATED);
+    }
+
+
+    //Postman: Set header multipart/d
+    //
+
+    @RequestMapping(method = RequestMethod.POST, value = "/uploadfile/{title}", produces = "application/json")
+    public ResponseEntity<SuccessResource> createDocument(@PathVariable("title") String title, @RequestParam("file") MultipartFile fileToUpload) {
+
+
+        if (fileToUpload == null) {
+            throw new IllegalArgumentException("File to be uploaded is missing.");
+        }
+
+
+        Document doc = new Document();
+        doc.setTitle(title);
+        doc.setType(fileToUpload.getContentType());
+
+        try {
+            doc.setDocumentObject(fileToUpload.getBytes());
+        } catch (IOException e) {
+            throw new InternalErrorException(e, "createDocument", "IOError reading bytes.");
+        }
+
+
+        int retVal =documentService.createDocument(doc);
+
+        SuccessResource sr = new SuccessResource("Success", "Row with id " + retVal + " was created.");
+
         return new ResponseEntity<SuccessResource>(sr, new HttpHeaders(), HttpStatus.CREATED);
+    }
+
+
+    @RequestMapping(method=RequestMethod.GET, value="/download/{id}",  produces = "application/pdf")
+    public ResponseEntity<InputStreamResource> downloadPDFFile(@PathVariable("id") int id) throws IOException {
+
+        Document document = documentService.getDocumentById(id);
+
+        if ( document == null ){
+            throw new NotFoundException("Document with id = " + id + " does not exist.");
+
+        }
+        return ResponseEntity
+                .ok()
+                .contentLength(document.getDocumentObject().length)
+                .contentType( MediaType.parseMediaType("application/octet-stream"))
+                .body(new InputStreamResource(new ByteArrayInputStream(document.getDocumentObject())));
     }
 
 //    @RequestMapping(method = RequestMethod.POST)
