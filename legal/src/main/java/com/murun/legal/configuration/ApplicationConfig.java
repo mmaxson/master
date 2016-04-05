@@ -1,6 +1,8 @@
 package com.murun.legal.configuration;
 
 
+import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,24 +13,30 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@Configuration
-@EnableWebMvc
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
+
+
 @EnableTransactionManagement
-@ComponentScan("com.murun.legal.*")
+@EnableWebMvc
+@ComponentScan(basePackages="com.murun.*")
 @PropertySource(value = "classpath:properties/database.properties")
 
 
-@EnableJpaRepositories("com.murun.legal.repository")
+@EnableJpaRepositories("com.murun.legal.*")
 
-
-public class ApplicationConfig {
+@Configuration
+public class ApplicationConfig  {
 
     private static final String PROPERTY_NAME_DATABASE_DRIVER = "jdbc.driverClassName";
     private static final String PROPERTY_NAME_DATABASE_PASSWORD = "jdbc.password";
@@ -64,11 +72,22 @@ public class ApplicationConfig {
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         entityManagerFactoryBean.setPackagesToScan(env.getRequiredProperty(PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN));
-
+        //entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         entityManagerFactoryBean.setJpaProperties(hibProperties());
 
         return entityManagerFactoryBean;
     }
+
+//    @Bean
+//    public SessionFactory sessionFactory(){
+//
+//        HibernateEntityManagerFactory  emf = (HibernateEntityManagerFactory)entityManagerFactory().getObject();
+//        emf.getProperties()
+//        return
+//
+//        ((HibernateEntityManagerFactory)entityManagerFactory().getObject())
+//                .getSessionFactory();
+//    }
 
     private Properties hibProperties() {
         Properties properties = new Properties();

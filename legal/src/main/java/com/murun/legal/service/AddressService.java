@@ -2,8 +2,7 @@ package com.murun.legal.service;
 
 import com.murun.legal.model.Address;
 import com.murun.legal.model.AddressList;
-import com.murun.legal.repository.AddressRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.murun.legal.repository.inter.AddressRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,7 @@ import javax.annotation.Resource;
 public class AddressService {
 
     @Resource
-	AddressRepository addressRepository;
+    AddressRepository addressRepository;
 
 
 	public AddressList getAll(){
@@ -24,15 +23,15 @@ public class AddressService {
 	}
 
 	public AddressList getByState( String state ){
-        return addressRepository.getByState( state );
+        return addressRepository.getAddressByState( state );
 	}
 
     public AddressList getByStateAndCity( String state, String city ){
-        return addressRepository.getByStateAndCity( state, city );
+        return addressRepository.getAddressByStateAndCity( state, city );
     }
 
     public AddressList getByZipCode(String zipCode){
-        return addressRepository.getByZipCode( zipCode );
+        return addressRepository.getAddressByZip( zipCode );
     }
 
 	public Address getById(int id){

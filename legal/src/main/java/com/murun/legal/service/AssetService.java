@@ -2,7 +2,7 @@ package com.murun.legal.service;
 
 
 import com.murun.legal.model.Asset;
-import com.murun.legal.repository.AssetRepository;
+import com.murun.legal.repository.inter.AssetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
