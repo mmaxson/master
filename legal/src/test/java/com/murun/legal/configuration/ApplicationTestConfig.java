@@ -1,16 +1,15 @@
 package com.murun.legal.configuration;
 
 
+import com.murun.legal.configuration.ApplicationConfig;
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,18 +18,19 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+import static org.springframework.context.annotation.ComponentScan.*;
 
 
 @EnableTransactionManagement
 @EnableWebMvc
-@ComponentScan(basePackages="com.murun.*")
-@PropertySource(value = "classpath:properties/database.properties")
+@ComponentScan(basePackages={"com.murun.*"},  excludeFilters = @ComponentScan.Filter(value= ApplicationConfig.class, type = FilterType.ASSIGNABLE_TYPE))
+@PropertySource(value = "classpath:properties/database-unit-test.properties")
 
 
 @EnableJpaRepositories("com.murun.legal.*")
 
 @Configuration
-public class ApplicationConfig  {
+public class ApplicationTestConfig {
 
     private static final String PROPERTY_NAME_DATABASE_DRIVER = "jdbc.driverClassName";
     private static final String PROPERTY_NAME_DATABASE_PASSWORD = "jdbc.password";

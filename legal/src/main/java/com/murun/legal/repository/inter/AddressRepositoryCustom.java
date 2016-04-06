@@ -1,7 +1,6 @@
 package com.murun.legal.repository.inter;
 
 import com.murun.legal.model.AddressList;
-import org.springframework.stereotype.Repository;
 
 
 public interface AddressRepositoryCustom {
