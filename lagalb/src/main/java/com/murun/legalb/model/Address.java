@@ -19,13 +19,13 @@ public class Address {
 	private int id;
 	
 	private String street;
-	//@Size(max = 30)
+	@Size(max = 30)
 	private String city;
 
-	//@Size(max = 2)
+	@Size(max = 2)
 	private String state;
 
-//	@Size(max = 5)
+    @Size(max = 5)
 	private String zipCode;
 	
 	public Address() {
