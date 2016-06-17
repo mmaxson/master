@@ -25,14 +25,6 @@ public class Address {
 	public Address() {
 	}
 
-//	public Address( String street, String state, String zipCode) {
-//		super();
-//		Street = street;
-//		State = state;
-//		ZipCode = zipCode;
-//	}
-	
-	
 	public int getId() {
 		return id;
 	}
