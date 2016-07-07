@@ -24,7 +24,9 @@ import static org.springframework.context.annotation.ComponentScan.*;
 @EnableTransactionManagement
 @EnableWebMvc
 @ComponentScan(basePackages={"com.murun.*"},  excludeFilters = @ComponentScan.Filter(value= ApplicationConfig.class, type = FilterType.ASSIGNABLE_TYPE))
+
 @PropertySource(value = "classpath:properties/database-unit-test.properties")
+@PropertySource(value = "classpath:properties/aws.properties")
 
 
 @EnableJpaRepositories("com.murun.legal.*")
@@ -43,8 +45,14 @@ public class ApplicationTestConfig {
     private static final String PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE ="hibernate.jdbc.batch_size";
     private static final String PROPERTY_NAME_HIBERNATE_DEFAULT_SCHEMA="hibernate.default_schema";
 
+
+    private static final String PROPERTY_KMS_ENDPOINT = "kms.endpoint";
+    private static final String PROPERTY_KMS_KEYID = "kms.keyId";
+
     @Resource
     private Environment env;
+
+
 
 
     @Bean
@@ -97,5 +105,16 @@ public class ApplicationTestConfig {
         return multipartResolver;
     }
 
+
+    @Bean
+    public String kmsEndPoint() {
+        System.out.println("=====================================" + env.getRequiredProperty(PROPERTY_KMS_ENDPOINT));
+        return env.getRequiredProperty(PROPERTY_KMS_ENDPOINT);
+    }
+
+    @Bean
+    public String kmsKeyId() {
+        return env.getRequiredProperty(PROPERTY_KMS_KEYID);
+    }
 
 }

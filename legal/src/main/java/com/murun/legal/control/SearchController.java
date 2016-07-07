@@ -9,6 +9,7 @@ import com.murun.legal.model.Asset;
 import com.murun.legal.model.SuccessResource;
 import com.murun.legal.service.AddressService;
 import com.murun.legal.service.AssetService;
+import com.murun.legal.service.KMSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
@@ -39,6 +40,15 @@ public class SearchController {
     @Resource
     private AssetService assetService;
 
+    @Resource
+    private KMSClient kmsClient;
+
+
+    @RequestMapping(method=RequestMethod.GET, value="/encrypt/{encrypt}", produces="application/json")
+    public String encrypt(@PathVariable("encrypt")String clearText){
+        logger.info("encrypt================================ ");
+        return kmsClient.encryptData(clearText);
+    }
 
 
     @RequestMapping(method=RequestMethod.GET, value="", produces="application/json")
@@ -47,6 +57,11 @@ public class SearchController {
         return addressService.getAll();
     }
 
+    @RequestMapping(method=RequestMethod.GET, value="/check/{check}", produces="application/json")
+    public ResponseEntity<String> healthCheck(@PathVariable("check") String dummy){
+        logger.info("check================================ ");
+        return  ResponseEntity.ok().body("OK");
+    }
 
 	@RequestMapping(method=RequestMethod.GET, value="/zipcode/{zipcode}", produces="application/json")
 	public AddressList findByZipCode( @PathVariable("zipcode") String zipCode ) {

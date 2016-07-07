@@ -10,7 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
+
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -26,7 +26,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableWebMvc
 @ComponentScan(basePackages="com.murun.*")
-@PropertySource(value = "classpath:properties/database.properties")
+@PropertySource(value = "classpath:properties/database.properties, classpath:properties/aws.properties")
 
 
 @EnableJpaRepositories("com.murun.legal.*")
@@ -44,6 +44,11 @@ public class ApplicationConfig  {
     private static final String PROPERTY_NAME_HIBERNATE_JDBC_FETCH_SIZE = "hibernate.jdbc.fetch_size";
     private static final String PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE ="hibernate.jdbc.batch_size";
     private static final String PROPERTY_NAME_HIBERNATE_DEFAULT_SCHEMA="hibernate.default_schema";
+
+
+    private static final String PROPERTY_KMS_ENDPOINT = "kms.endpoint";
+    private static final String PROPERTY_KMS_KEYID = "kms.keyId";
+
 
     @Resource
     private Environment env;
@@ -102,4 +107,14 @@ public class ApplicationConfig  {
     }
 
 
+    @Bean
+    public String kmsEndPoint() {
+        return env.getProperty(PROPERTY_KMS_ENDPOINT);
+    }
+
+
+    @Bean
+    public String kmsKeyId() {
+        return env.getProperty(PROPERTY_KMS_KEYID);
+    }
 }

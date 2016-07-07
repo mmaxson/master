@@ -198,6 +198,13 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.11.14</version>
+        </dependency>
+
+
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
